@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      - API_ID=3000
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+
+  cli:
+    build:
+      context: ./cli
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./cli:/app
+      - /app/node_modules
