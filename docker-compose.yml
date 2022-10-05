@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Setup multiple API servers
+  api_1:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      - API_ID=5555
+  api_2:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      - API_ID=2222
+  api_3:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      - API_ID=3333
+  api_4:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      - API_ID=4444
+
+  # build image for web server
+  cli:
+    build:
+      context: ./cli
+      dockerfile: Dockerfile.prod
+    volumes:
+      - dist:/app/dist
+
+  # web server
+  # load balancer
+  server:
+    build:
+      context: ./web-server
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - dist:/usr/share/nginx/html
+    depends_on:
+      - cli
+
+volumes:
+  dist:
+    name: dist
